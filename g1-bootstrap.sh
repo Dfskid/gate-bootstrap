@@ -432,6 +432,8 @@ dGVkQnk9bXVsdGktdXNlci50YXJnZXQK
 G1_FILE_9
 chmod 444 '/etc/systemd/system/gate-pool-keeper.service'
 export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y 'docker.io' 'iptables' 'xz-utils' 'curl' 'ca-certificates' 'kbd' 'unattended-upgrades'
+g1_apt() { n=0; until apt-get -o DPkg::Lock::Timeout=600 "$@"; do n=$((n + 1)); [ "$n" -lt 3 ] || return 1; sleep 15; done; }
+say 'G1 SETUP: installing packages, this can take a few minutes'
+g1_apt update
+g1_apt install -y 'docker.io' 'iptables' 'xz-utils' 'curl' 'ca-certificates' 'kbd' 'unattended-upgrades'
 exec 'sh' '/opt/gate-runner/bootstrap.sh'
