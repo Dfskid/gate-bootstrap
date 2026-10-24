@@ -8,10 +8,23 @@
   var params = new URLSearchParams(window.location.search);
   var code = (params.get("code") || "").trim();
   try { window.history.replaceState(null, "", window.location.pathname); } catch (e) { /* keep going */ }
-  // Survive an accidental reload in the same tab; sessionStorage is cleared when the tab closes.
+  // Survive an accidental reload. GitHub codes expire one hour after issue, so the cached copy carries its
+  // receipt time and is refused after 55 minutes (a browser may restore session storage with a closed tab).
+  var LIFE_MS = 55 * 60 * 1000;
+  var received = Date.now();
   try {
-    if (code) { window.sessionStorage.setItem(KEY, code); } else { code = window.sessionStorage.getItem(KEY) || ""; }
-  } catch (e) { /* storage blocked: reload shows step 1 */ }
+    if (code) {
+      window.sessionStorage.setItem(KEY, JSON.stringify({ code: code, t: received }));
+    } else {
+      var saved = JSON.parse(window.sessionStorage.getItem(KEY) || "null");
+      if (saved && typeof saved.code === "string" && typeof saved.t === "number") { code = saved.code; received = saved.t; }
+    }
+  } catch (e) { /* storage blocked or unreadable: reload shows step 1 */ }
+  if (code && Date.now() - received > LIFE_MS) {
+    try { window.sessionStorage.removeItem(KEY); } catch (e) { /* nothing cached */ }
+    document.getElementById("expired").hidden = false;
+    return;
+  }
   if (!/^[A-Za-z0-9_-]{8,128}$/.test(code) || TEMPLATE.indexOf("PASTE_CODE_HERE") < 0) {
     document.getElementById("bad").hidden = false;
     return;
