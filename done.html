@@ -27,8 +27,9 @@
 <p id="manual" class="note" hidden>Press and hold inside the box below, tap <b>Select All</b>, then tap <b>Copy</b>.</p>
 <textarea id="block" readonly rows="14" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
 <ol>
+<li>Any retry starts again at step 1; GitHub codes expire after one hour.</li>
 <li>Open <b>console.hetzner.com</b> and go into the project you used last time.</li>
-<li>Delete the old server <b>ubuntu-4gb-hel1-3</b> first (open it, tap <b>Delete</b>). It never set up, and deleting it stops its charge.</li>
+<li>If a server from an earlier try still exists, delete it first (open it, tap <b>Delete</b>).</li>
 <li>Tap <b>Create Server</b>.</li>
 <li><b>Location:</b> any. <b>Image:</b> Ubuntu 24.04. <b>Type:</b> Shared vCPU, Arm64, <b>CAX11</b>. If CAX11 is not offered, pick <b>CX23</b> under x86.</li>
 <li><b>SSH keys:</b> leave empty.</li>
@@ -40,10 +41,11 @@
 <ol>
 <li>Wait 2 minutes. Open the new server and tap the <b>Console</b> icon (top right, looks like <b>&gt;_</b>). Do not type anything.</li>
 <li>You should see lines like <b>G1 SETUP: step 1 of 6</b>, counting up to step 6. That means it is working. If you see only a <b>login:</b> prompt after 5 minutes, stop and tell me.</li>
-<li>Within 15 minutes a line appears that starts with <b>GATE-ATTEST app_id=</b>. It repeats every 30 seconds.</li>
+<li>Within 15 minutes a line appears with <b>GATE-ATTEST app_id=&lt;number&gt;</b>. It repeats every 30 seconds.</li>
 <li>If instead you see a line starting with <b>G1 FAILED</b>, stop and send a screenshot of it. Do not install anything.</li>
-<li>In GitHub, open Vandelay-Org Settings, Developer settings, GitHub Apps, then the new App. Check its <b>App ID</b> equals the app_id number on the console, and that it lists <b>exactly one</b> private key whose fingerprint matches the key_fingerprint on the console.</li>
-<li>Only if both match: tap <b>Install App</b>, choose <b>Vandelay-Org</b>, and confirm.</li>
+<li>Open the <a href="https://github.com/organizations/Vandelay-Org/settings/apps/vandelay-gate-runner-provisioner">App settings</a>. Check that the <b>App ID</b> matches the app_id number on the console. Check that <b>Private keys</b> lists <b>exactly one</b> key.</li>
+<li>Only if both checks pass, open the <a href="https://github.com/apps/vandelay-gate-runner-provisioner/installations/new">App installation page</a>. Choose <b>Vandelay-Org</b> and tap <b>Install</b>. Seeing "no repository access" is expected.</li>
+<li>If a link shows 404 on the phone, use the browser's <b>Request Desktop Website</b>.</li>
 </ol>
 <p class="note">That is everything. Reply "done" and the rest is automatic.</p>
 </div>
