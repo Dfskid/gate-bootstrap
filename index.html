@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; form-action https://github.com">
+<title>Gate server setup</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Gate server setup: step 1 of 3</h1>
+<p>Sign in to github.com in this browser first, then tap the button.</p>
+<form method="post" action="https://github.com/organizations/Vandelay-Org/settings/apps/new">
+<input type="hidden" name="manifest" value="{&quot;name&quot;:&quot;Vandelay gate runner provisioner&quot;,&quot;url&quot;:&quot;https://github.com/Vandelay-Org&quot;,&quot;description&quot;:&quot;Keeps the gate-isolated pool of one-job runners. One org permission: self-hosted runners (write). Its private key exists only on the gate host.&quot;,&quot;public&quot;:false,&quot;redirect_url&quot;:&quot;https://dfskid.github.io/gate-bootstrap/done.html&quot;,&quot;default_permissions&quot;:{&quot;organization_self_hosted_runners&quot;:&quot;write&quot;},&quot;default_events&quot;:[]}">
+<button type="submit">Create App</button>
+</form>
+<ol>
+<li>GitHub opens a page titled <b>Create GitHub App for Vandelay-Org</b>. Check that the only organization permission listed is <b>Self-hosted runners: Read and write</b>.</li>
+<li>Tap <b>Create GitHub App</b>. If GitHub says the name is taken, add a number to the end of the name and tap it again.</li>
+<li>You come back to a page here showing a ready-made block with a <b>Copy</b> button. That is step 2.</li>
+</ol>
+<p class="note">Do not install the App yet. That is step 3, after the server shows its check line.</p>
+</body>
+</html>
