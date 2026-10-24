@@ -5,7 +5,7 @@ h1{font-size:22px;line-height:1.3}
 h2{font-size:19px;margin-top:28px}
 button{font:inherit;font-size:19px;font-weight:600;padding:14px 20px;width:100%;border-radius:10px;border:0;background:var(--accent);color:#fff}
 button.done{background:var(--ok)}
-pre{background:var(--muted);padding:12px;border-radius:8px;font-size:12px;white-space:pre-wrap;word-break:break-all}
+textarea{box-sizing:border-box;width:100%;margin-top:12px;background:var(--muted);color:var(--fg);border:0;padding:12px;border-radius:8px;font:12px/1.4 ui-monospace,Menlo,monospace;word-break:break-all}
 ol{padding-left:22px}
 ol li{margin:10px 0}
 .note{background:var(--muted);padding:12px;border-radius:8px}
