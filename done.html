@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+<title>Gate server setup</title>
+<link rel="stylesheet" href="style.css">
+<script src="done.js" defer></script>
+</head>
+<body>
+<div id="bad" hidden>
+<h1>Start at step 1</h1>
+<p>This page only works when GitHub opens it right after you tap <b>Create GitHub App</b>.</p>
+<p><a href="index.html">Go to step 1</a></p>
+</div>
+<div id="expired" hidden>
+<h1>This code has expired</h1>
+<p>GitHub codes last one hour. Do not create a server with it. Start again at step 1; it takes one minute.</p>
+<p><a href="index.html">Go to step 1</a></p>
+</div>
+<div id="good" hidden>
+<h1>Step 2 of 3: create the server</h1>
+<p class="note">Do this within 1 hour. The block below already contains your one-time code. You do not edit anything.</p>
+<button id="copy" type="button">Copy setup block</button>
+<p id="manual" class="note" hidden>Press and hold inside the box below, tap <b>Select All</b>, then tap <b>Copy</b>.</p>
+<textarea id="block" readonly rows="14" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+<ol>
+<li>Open <b>console.hetzner.com</b> and go into the project you used last time.</li>
+<li>Delete the old server <b>ubuntu-4gb-hel1-3</b> first (open it, tap <b>Delete</b>). It never set up, and deleting it stops its charge.</li>
+<li>Tap <b>Create Server</b>.</li>
+<li><b>Location:</b> any. <b>Image:</b> Ubuntu 24.04. <b>Type:</b> Shared vCPU, Arm64, <b>CAX11</b>. If CAX11 is not offered, pick <b>CX23</b> under x86.</li>
+<li><b>SSH keys:</b> leave empty.</li>
+<li><b>Firewalls:</b> if a firewall is listed, tick it. If none is listed, skip this.</li>
+<li><b>Cloud config:</b> the box is empty. Tap inside it and paste. Do not change anything.</li>
+<li>Tap <b>Create &amp; Buy now</b>.</li>
+</ol>
+<h2>Step 3 of 3: check, then install</h2>
+<ol>
+<li>Wait 2 minutes. Open the new server and tap the <b>Console</b> icon (top right, looks like <b>&gt;_</b>). Do not type anything.</li>
+<li>You should see lines like <b>G1 SETUP: step 1 of 6</b>, counting up to step 6. That means it is working. If you see only a <b>login:</b> prompt after 5 minutes, stop and tell me.</li>
+<li>Within 15 minutes a line appears that starts with <b>GATE-ATTEST app_id=</b>. It repeats every 30 seconds.</li>
+<li>If instead you see a line starting with <b>G1 FAILED</b>, stop and send a screenshot of it. Do not install anything.</li>
+<li>In GitHub, open Vandelay-Org Settings, Developer settings, GitHub Apps, then the new App. Check its <b>App ID</b> equals the app_id number on the console, and that it lists <b>exactly one</b> private key whose fingerprint matches the key_fingerprint on the console.</li>
+<li>Only if both match: tap <b>Install App</b>, choose <b>Vandelay-Org</b>, and confirm.</li>
+</ol>
+<p class="note">That is everything. Reply "done" and the rest is automatic.</p>
+</div>
+</body>
+</html>
