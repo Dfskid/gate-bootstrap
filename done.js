@@ -20,23 +20,42 @@
       if (saved && typeof saved.code === "string" && typeof saved.t === "number") { code = saved.code; received = saved.t; }
     }
   } catch (e) { /* storage blocked or unreadable: reload shows step 1 */ }
-  if (code && Date.now() - received > LIFE_MS) {
+  var deadline = received + LIFE_MS;
+  var good = document.getElementById("good");
+  var box = document.getElementById("block");
+  var btn = document.getElementById("copy");
+  var manual = document.getElementById("manual");
+  var text = "";
+  // One place makes an expired code unusable: cache removed, block cleared, copy disabled, expired screen shown.
+  function expire() {
     try { window.sessionStorage.removeItem(KEY); } catch (e) { /* nothing cached */ }
+    text = "";
+    box.value = "";
+    btn.disabled = true;
+    good.hidden = true;
     document.getElementById("expired").hidden = false;
-    return;
   }
+  function expiredNow() {
+    if (Date.now() <= deadline) { return false; }
+    expire();
+    return true;
+  }
+  if (code && expiredNow()) { return; }
   if (!/^[A-Za-z0-9_-]{8,128}$/.test(code) || TEMPLATE.indexOf("PASTE_CODE_HERE") < 0) {
     document.getElementById("bad").hidden = false;
     return;
   }
-  var text = TEMPLATE.replace("PASTE_CODE_HERE", code);
-  var box = document.getElementById("block");
-  var btn = document.getElementById("copy");
-  var manual = document.getElementById("manual");
+  text = TEMPLATE.replace("PASTE_CODE_HERE", code);
   box.value = text;
-  document.getElementById("good").hidden = false;
-  function copied() { btn.textContent = "Copied. Now go to Hetzner"; btn.className = "done"; }
+  good.hidden = false;
+  // Timers can be suspended in a background tab, so also recheck whenever the page is shown again.
+  window.setTimeout(expiredNow, Math.max(0, deadline - Date.now()) + 1000);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) { expiredNow(); } });
+  window.addEventListener("pageshow", expiredNow);
+  window.addEventListener("focus", expiredNow);
+  function copied() { if (!expiredNow()) { btn.textContent = "Copied. Now go to Hetzner"; btn.className = "done"; } }
   function legacyCopy() {
+    if (expiredNow()) { return; }
     box.focus();
     box.setSelectionRange(0, box.value.length);
     var ok = false;
@@ -44,6 +63,7 @@
     if (ok) { copied(); } else { btn.textContent = "Copy did not work"; manual.hidden = false; }
   }
   btn.addEventListener("click", function () {
+    if (expiredNow()) { return; }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(copied, legacyCopy);
     } else {
