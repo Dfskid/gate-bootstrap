@@ -3,7 +3,7 @@
 // code and serves this page) receives it in the redirect; it then goes only into Hetzner via the paste.
 (function () {
   "use strict";
-  var TEMPLATE = "#cloud-config\n<<: {ssh_pwauth: false, allow_public_ssh_keys: false, disable_root: true}\nwrite_files:\n- {path: /etc/gate-runner/manifest-code, permissions: 0o400, content: !!str PASTE_CODE_HERE}\nruncmd:\n- >-\n  p=/run/g1-bootstrap.sh; for i in 1 2 3 4 5; do curl -fsSLo $p https://raw.githubusercontent.com/Dfskid/gate-bootstrap/1ea8b37b1461f584b96c9f1a418e917ae114a00c/g1-bootstrap.sh && break; sleep 3; done; [ -s $p ] || { echo G1 FAILED: bootstrap download | tee /dev/tty1 /dev/ttyS0; exit 1; };\n  echo 253c413fe0e190be2d9cdf9a296a65bd225329e003d7206345a8a282c16690a3 $p | sha256sum -c - || { echo G1 FAILED: bootstrap fingerprint mismatch | tee /dev/tty1 /dev/ttyS0; exit 1; }; sh $p\n";
+  var TEMPLATE = "#cloud-config\n<<: {ssh_pwauth: false, allow_public_ssh_keys: false, disable_root: true}\nwrite_files:\n- {path: /etc/gate-runner/manifest-code, permissions: 0o400, content: !!str PASTE_CODE_HERE}\nruncmd:\n- >-\n  p=/run/g1-bootstrap.sh; for i in 1 2 3 4 5; do curl -fsSL -m 120 -o $p https://raw.githubusercontent.com/Dfskid/gate-bootstrap/1aaed30796358e7bdc6f5d035c89932be835cb67/g1-bootstrap.sh && break; sleep 3; done; [ -s $p ] || { echo G1 FAILED: bootstrap download | tee /dev/tty1 /dev/ttyS0; exit 1; };\n  echo b3cfc13152a8e0ac73a7ed7fc7d8856203286441449e4d4c34375d5a503d07fb $p | sha256sum -c - || { echo G1 FAILED: bootstrap fingerprint mismatch | tee /dev/tty1 /dev/ttyS0; exit 1; }; sh $p\n";
   var KEY = "g1-code";
   var params = new URLSearchParams(window.location.search);
   var code = (params.get("code") || "").trim();
